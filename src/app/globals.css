@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles.module.css */
+
+/* global.css */
+
+/* Parallax container */
+.parallaxContainer {
+    position: relative;
+    overflow: hidden;
+    height: 100vh; /* Adjust depending on the layout */
+  }
+  
+  /* Image container */
+  .imageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  /* Subtle load animation */
+  .animatedImage {
+    animation: fadeIn 1.5s ease-out forwards, bounce 0.5s ease-in-out infinite alternate;
+    transform-origin: center;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Hover effect: Scale up slightly */
+  .animatedImage:hover {
+    transform: scale(1.05) translateY(-10px); /* Slight lift */
+    transition: transform 0.5s ease;
+  }
+  
+  /* Fade-in animation on load */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Bounce animation */
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  /* Parallax scroll effect on hover (optional: you can add subtle shaking as well) */
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-2deg);
+    }
+    50% {
+      transform: rotate(2deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  /* Extra interactions for future use */
+  .tooltip {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 5px;
+    display: none;
+  }
+  
+  .imageContainer:hover .tooltip {
+    display: block;
+  }
+  
