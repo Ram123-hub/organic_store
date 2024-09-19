@@ -30,14 +30,14 @@ const TrendingCard: React.FC<ProductCardProps> = ({
         </span>
       )}
       {/* Product Image */}
-      
-<Image
-  src={image}
-  alt={name}
-  width={500} // Set appropriate width based on your design, this is a placeholder
-  height={192} // The h-48 class corresponds to 192px (48 * 4)
-  className="w-full h-48 object-cover rounded-md mb-4"
-/>
+
+      <Image
+        src={image}
+        alt={name}
+        width={500} // Set appropriate width based on your design, this is a placeholder
+        height={192} // The h-48 class corresponds to 192px (48 * 4)
+        className="w-full h-48 object-cover rounded-md mb-4"
+      />
       {/* Category */}
       <p className="text-sm text-gray-500">{category}</p>
       {/* Product Name */}

@@ -1,5 +1,4 @@
 
-
 'use client'
 
 import { Navbar } from '@/components/navbar';
@@ -30,8 +29,8 @@ export default function Cart() {
                     <Image
                       src={item.image}
                       alt={item.name}
-                      width={64} // Corresponds to w-16 (16 * 4 = 64px)
-                      height={64} // Corresponds to h-16 (16 * 4 = 64px)
+                      width={64}
+                      height={64}
                       className="rounded-lg mr-4"
                     />
                     <span className="text-lg font-medium text-green-900">{item.name}</span>

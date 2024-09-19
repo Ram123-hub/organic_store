@@ -38,7 +38,7 @@ export default function ProductDetail() {
         {/* Product Details */}
         <h1 className="text-2xl font-bold text-thingreen">{product.name}</h1>
         <p className="mb-4">{product.description}</p>
-        <p className="text-xl font-semibold mb-4">${product.price}</p>
+        <p className="text-xl font-semibold mb-4">₹{product.price}</p>
 
         {/* Add to Cart Button */}
         <button

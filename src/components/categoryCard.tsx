@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 interface CategoryCardProps {
@@ -29,12 +30,12 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       />
       <h2 className="text-xl sm:text-2xl text-black font-bold mb-2">{name}</h2>
       <p className="text-gray-900 text-sm sm:text-base mb-4">{description}</p>
-      <a
+      <Link
         href={buttonLink}
         className="bg-thingreen text-white py-2 px-4 rounded-full inline-block hover:bg-green-700 transition-colors duration-300 ease-in-out"
       >
         {buttonText}
-      </a>
+      </Link>
     </div>
   );
 };

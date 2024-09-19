@@ -81,7 +81,7 @@ export default function EverythingPage({
 
         {/* Category Filters */}
         <main className="container mx-auto flex flex-col md:flex-row mt-6 px-6">
-          <aside className="md:w-1/4 pt-6 bg-white p-4 rounded-lg shadow-md mb-8 md:mb-0">
+          <aside className="md:w-1/4 pt-6 bg-skin p-4 rounded-lg shadow-md mb-8 md:mb-0">
             <div className="mb-4">
               <h2 className="text-lg font-semibold mb-2 text-green-600">Filter by Category:</h2>
               <div className="flex gap-2 flex-wrap">
