@@ -1,22 +1,18 @@
 'use client'
-import GrocerySection from "@/components/grocerySection";
 import { Navbar } from "@/components/navbar";
 import Pagination from "@/components/pagination";
 import SearchBar from "@/components/searchBar";
 import { Slider } from "@/components/ui/slider";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
-import { products } from "@/lib/productListing";
+
 import CartIcon from "@/components/cartIcon";
+import ProductCard from "@/components/productCard";
+import { Product } from "@/lib/types";
 
-//Data comes from all of three grocery , juice , and dairy product
-
-
-
-
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 6;
 
 export default function EverythingPage({
   searchParams,
@@ -30,22 +26,47 @@ export default function EverythingPage({
   const currentPage = Number(searchParams?.page) || 1;
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]); // Track price range
-  const [sortBy, setSortBy] = useState("relevance"); // Track sorting option
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [sortBy, setSortBy] = useState("relevance");
 
-  // Handle category toggle
+  
+  const [products, setProducts] = useState<Product[]>([]); // Hold fetched groceries
+  const [isLoading, setIsLoading] = useState<boolean>(true);  // Loading state
+  const [error, setError] = useState<string | null>(null);  
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch groceries');
+        }
+        const data = await response.json();
+        setProducts(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setError('Error fetching products');  // Set error message
+        setIsLoading(false);                  // Ensure loading state is updated
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;  // Display loading state
+  if (error) return <div>{error}</div>;         // Display error message
+
+
   const handleCategoryToggle = (category: string) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter((cat) => cat !== category) // Deselect category
-        : [...prev, category] // Select category
+        ? prev.filter((cat) => cat !== category)
+        : [...prev, category]
     );
   };
 
-  // Get all categories dynamically from the groceries list
   const allCategories = Array.from(new Set(products.map((product) => product.category)));
 
-  // Filter and sort the groceries based on query, category, and price range
   const filteredGroceries = products
     .filter((product) =>
       product.name.toLowerCase().includes(query.toLowerCase()) &&
@@ -56,7 +77,7 @@ export default function EverythingPage({
     .sort((a, b) => {
       if (sortBy === 'price-low-high') return a.price - b.price;
       if (sortBy === 'price-high-low') return b.price - a.price;
-      return 0; // Default to relevance (no sorting)
+      return 0;
     });
 
   const totalPages = Math.ceil(filteredGroceries.length / ITEMS_PER_PAGE);
@@ -69,8 +90,8 @@ export default function EverythingPage({
     <div className="bg-skin">
       <Navbar />
       <div className="absolute top-12 py-3 right-4">
-          <CartIcon />
-        </div>
+        <CartIcon />
+      </div>
       <div className="container mx-auto p-4">
         <Link href="/dashboard">
           <h1 className="text-3xl text-thingreen font-serif font-bold mb-4">Everything</h1>
@@ -79,7 +100,6 @@ export default function EverythingPage({
           <SearchBar placeholder="Search groceries..." />
         </div>
 
-        {/* Category Filters */}
         <main className="container mx-auto flex flex-col md:flex-row mt-6 px-6">
           <aside className="md:w-1/4 pt-6 bg-skin p-4 rounded-lg shadow-md mb-8 md:mb-0">
             <div className="mb-4">
@@ -99,7 +119,6 @@ export default function EverythingPage({
               </div>
             </div>
 
-            {/* Price Slider */}
             <div className="mb-4">
               <h2 className="text-lg text-green-600 font-semibold mb-2">Filter by Price:</h2>
               <Slider
@@ -112,7 +131,6 @@ export default function EverythingPage({
               <p className="mt-2 text-green-600">Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}</p>
             </div>
 
-            {/* Sort Options */}
             <div className="mb-4">
               <h2 className="text-lg text-green-600 font-semibold mb-2">Sort by:</h2>
               <select
@@ -136,10 +154,14 @@ export default function EverythingPage({
             </div>
           </aside>
 
-          {/* Display Groceries */}
           <section className="md:w-3/4 pl-0 md:pl-8">
-            <GrocerySection title="Available Groceries" groceries={displayedGroceries} />
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayedGroceries.map((product) => (
+                <Link  href={`/productDetails/${product.id}`}   key={product.id}>
+                <ProductCard product={product} />
+                </Link>
+              ))}
+            </div>
             <div className="mt-5">
               <Pagination totalPages={totalPages} />
             </div>

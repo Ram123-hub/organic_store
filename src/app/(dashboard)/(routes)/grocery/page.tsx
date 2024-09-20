@@ -7,10 +7,12 @@ import SearchBar from "@/components/searchBar";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
-import { groceries } from "@/lib/productListing";
+
 import CartIcon from "@/components/cartIcon";
+import { Product } from "@/lib/types";
+
 //Data comes only from grocery section 
 
 const ITEMS_PER_PAGE = 8;
@@ -27,6 +29,35 @@ export default function GroceriesPage({
   const currentPage = Number(searchParams?.page) || 1;
   const [sortBy] = useState("relevance");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]); // State to track price range
+
+
+  const [groceries, setGroceries] = useState<Product[]>([]); // Hold fetched groceries
+  const [isLoading, setIsLoading] = useState<boolean>(true);  // Loading state
+  const [error, setError] = useState<string | null>(null);    // Error state
+
+  // Fetch groceries data from the API
+  useEffect(() => {
+    const fetchGroceries = async () => {
+      try {
+        const response = await fetch('/api/groceries');
+        if (!response.ok) {
+          throw new Error('Failed to fetch groceries');
+        }
+        const data = await response.json();
+        setGroceries(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching groceries:', error);
+        setError('Error fetching groceries');  // Set error message
+        setIsLoading(false);                  // Ensure loading state is updated
+      }
+    };
+    fetchGroceries();
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;  // Display loading state
+  if (error) return <div>{error}</div>;         // Display error message
+
 
   // Filter the groceries based on search query and price range
   const filteredGroceries = groceries.filter((grocery) =>

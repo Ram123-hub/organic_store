@@ -5,15 +5,16 @@ import GroceryItem from "./groceryItem";
 import { Product } from '@/lib/types';
 import { Button } from "./ui/button";
 import { addToCart } from "@/sotre/cartSlice";
-import { useDispatch } from "react-redux"; // Import useDispatch from react-redux
+import { useDispatch } from "react-redux"; 
 
 interface GrocerySectionProps {
   title: string;
-  groceries: Product[];
+  groceries: Product[];  // Add groceries prop
 }
 
 const GrocerySection: React.FC<GrocerySectionProps> = ({ title, groceries }) => {
-  const dispatch = useDispatch(); // Initialize the dispatch function
+  const dispatch = useDispatch();
+
   return (
     <div className="mb-8">
       <h2 className="text-2xl text-thingreen font-semibold mb-4">{title}</h2>
